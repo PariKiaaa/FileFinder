@@ -1,0 +1,4 @@
+C:\f.abcdefg
+C:\Users\Parnaz\AppData\Roaming\Microsoft\Windows\Recent\a.abcdefg.lnk
+C:\Users\Parnaz\Desktop\a.abcdefg
+C:\Users\Parnaz\Desktop\Coding\a.abcdefg
