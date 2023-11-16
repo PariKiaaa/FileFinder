@@ -1,33 +1,26 @@
-#This program will create a "result.txt" file
-#If the file alreay exists, please delete its data, or just delete the file
-
 import os
-import string
 import io
 from ctypes import windll
+import string
 
-#find all drives
 def get_drives():
-    drives = []
     bitmask = windll.kernel32.GetLogicalDrives()
-    for letter in string.ascii_uppercase:
-        if bitmask & 1:
-            drives.append(letter)
-        bitmask >>= 1
-
+    drives = [letter for letter, mask in zip(string.ascii_uppercase, map(int, bin(bitmask)[:1:-1])) if mask]
     return drives
 
-#just for test in some drives
-# get_drives = ['E']
+def scan_and_write_files(extension):
+    target_files = []
+    for drive in get_drives():
+        for root, dirs, files in os.walk(f"{drive}:\\"):
+            for file in files:
+                if extension in file:
+                    file_path = os.path.join(root, file)
+                    target_files.append(file_path)
 
-#choose the file extention
-fo = 'abcdefg'
+    with io.open('result.txt', 'a', encoding="utf-8") as result_file:
+        result_file.write('\n'.join(target_files) + '\n')
 
-#for each folder in each drive, write the path of all files with "fo" format in the file "result.txt"
-for drive in get_drives():
-	for r, d, f in os.walk(f"{drive}:\\"):
-	    for file in f:
-	        filepath = os.path.join(r, file)
-	        if fo in file:
-	        	with io.open('result.txt','a',encoding="utf-8") as jpg:
-	        		jpg.write(f'{os.path.join(r, file)}\n')
+
+
+file_extension = 'jpg'
+scan_and_write_files(file_extension)
